@@ -42,13 +42,14 @@ public sealed class ControllerTests
     {
         var sender = Substitute.For<ISender>();
         var transaction = new TransactionDto(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), "Salary", 10m, DateTime.UtcNow, TransactionType.Income, "Salary", false, DateTime.UtcNow, null);
-        sender.Send(Arg.Any<GetTransactionsQuery>(), Arg.Any<CancellationToken>()).Returns(new[] { transaction });
+        var pagedResponse = PagedResponse<TransactionDto>.Create(new[] { transaction }, 1, 1, 5);
+        sender.Send(Arg.Any<GetTransactionsQuery>(), Arg.Any<CancellationToken>()).Returns(pagedResponse);
         sender.Send(Arg.Any<GetTransactionByIdQuery>(), Arg.Any<CancellationToken>()).Returns(transaction);
         sender.Send(Arg.Any<GetTransactionHistoryQuery>(), Arg.Any<CancellationToken>())
             .Returns(new[] { new TransactionHistoryDto(Guid.NewGuid(), transaction.Id, HistoryActionType.Created, "Created", null, null, DateTime.UtcNow) });
         var controller = new TransactionsController(sender);
 
-        (await controller.GetAll(CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
+        (await controller.GetAll(1, 5, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
         (await controller.GetById(transaction.Id, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
         (await controller.GetHistory(transaction.Id, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
     }

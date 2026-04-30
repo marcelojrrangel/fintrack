@@ -207,25 +207,66 @@ public sealed class QueryAndCommandHandlerTests
         var (user, incomeCategory, _) = TestDbContextFactory.SeedUserWithCategories(context);
         var newer = TestDbContextFactory.SeedTransaction(context, user, incomeCategory, 20m, DateTime.UtcNow, TransactionType.Income, "New");
         var older = TestDbContextFactory.SeedTransaction(context, user, incomeCategory, 10m, DateTime.UtcNow.AddDays(-1), TransactionType.Income, "Old");
-        var handler = new GetTransactionsQueryHandler(context, new TestCurrentUserService { UserId = user.Id });
+        var handler = new GetTransactionsQueryHandler(context, new TestCurrentUserService { UserId = user.Id }, NullLogger<GetTransactionsQueryHandler>.Instance);
 
-        var result = await handler.Handle(new GetTransactionsQuery(), CancellationToken.None);
+        var result = await handler.Handle(new GetTransactionsQuery(1, 5), CancellationToken.None);
 
-        result.Should().HaveCount(2);
-        result.First().Description.Should().Be("New");
-        result.First().CategoryName.Should().Be(incomeCategory.Name);
+        result.Items.Should().HaveCount(2);
+        result.Items.First().Description.Should().Be("New");
+        result.Items.First().CategoryName.Should().Be(incomeCategory.Name);
+        result.TotalCount.Should().Be(2);
+        result.PageNumber.Should().Be(1);
+        result.PageSize.Should().Be(5);
     }
 
     [Fact]
     public async Task GetTransactionsQueryHandler_ShouldThrowWhenUserDoesNotExist()
     {
         await using var context = TestDbContextFactory.CreateContext();
-        var handler = new GetTransactionsQueryHandler(context, new TestCurrentUserService { UserId = Guid.NewGuid() });
+        var handler = new GetTransactionsQueryHandler(context, new TestCurrentUserService { UserId = Guid.NewGuid() }, NullLogger<GetTransactionsQueryHandler>.Instance);
 
-        var action = async () => await handler.Handle(new GetTransactionsQuery(), CancellationToken.None);
+        var action = async () => await handler.Handle(new GetTransactionsQuery(1, 5), CancellationToken.None);
 
         await action.Should().ThrowAsync<NotFoundException>()
             .WithMessage("User '*' was not found.");
+    }
+
+    [Fact]
+    public async Task GetTransactionsQueryHandler_ShouldPaginateCorrectly()
+    {
+        await using var context = TestDbContextFactory.CreateContext();
+        var (user, incomeCategory, _) = TestDbContextFactory.SeedUserWithCategories(context);
+
+        // Criar 12 transações para testar paginação
+        for (int i = 0; i < 12; i++)
+        {
+            TestDbContextFactory.SeedTransaction(context, user, incomeCategory, 100m + i, DateTime.UtcNow.AddDays(-i), TransactionType.Income, $"Transaction {i}");
+        }
+
+        var handler = new GetTransactionsQueryHandler(context, new TestCurrentUserService { UserId = user.Id }, NullLogger<GetTransactionsQueryHandler>.Instance);
+
+        // Testar primeira página (5 itens)
+        var page1 = await handler.Handle(new GetTransactionsQuery(1, 5), CancellationToken.None);
+        page1.Items.Should().HaveCount(5);
+        page1.TotalCount.Should().Be(12);
+        page1.TotalPages.Should().Be(3);
+        page1.PageNumber.Should().Be(1);
+        page1.HasNextPage.Should().BeTrue();
+        page1.HasPreviousPage.Should().BeFalse();
+
+        // Testar segunda página (5 itens)
+        var page2 = await handler.Handle(new GetTransactionsQuery(2, 5), CancellationToken.None);
+        page2.Items.Should().HaveCount(5);
+        page2.PageNumber.Should().Be(2);
+        page2.HasNextPage.Should().BeTrue();
+        page2.HasPreviousPage.Should().BeTrue();
+
+        // Testar terceira página (2 itens restantes)
+        var page3 = await handler.Handle(new GetTransactionsQuery(3, 5), CancellationToken.None);
+        page3.Items.Should().HaveCount(2);
+        page3.PageNumber.Should().Be(3);
+        page3.HasNextPage.Should().BeFalse();
+        page3.HasPreviousPage.Should().BeTrue();
     }
 
     [Fact]

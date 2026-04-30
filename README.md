@@ -40,7 +40,7 @@ Sistema completo de controle financeiro pessoal desenvolvido com **.NET 8 WebAPI
 - ✅ Criar transações (receitas e despesas)
 - ✅ Editar transações existentes
 - ✅ Excluir transações (soft delete)
-- ✅ Listar transações com filtros
+- ✅ **Listar transações com paginação** (5 registros por página por padrão)
 - ✅ Visualizar detalhes de transações
 - ✅ Histórico completo de alterações (auditoria)
 
@@ -210,12 +210,32 @@ npm test
 
 ### Transactions
 ```http
-GET    /api/transactions              # Listar transações do usuário
+GET    /api/transactions              # Listar transações (paginado: 5 por página)
+       ?pageNumber=1                   # Número da página (padrão: 1)
+       &pageSize=5                     # Tamanho da página (padrão: 5, máx: 100)
+
 GET    /api/transactions/{id}         # Obter transação por ID
 POST   /api/transactions              # Criar nova transação
 PUT    /api/transactions/{id}         # Atualizar transação
 DELETE /api/transactions/{id}         # Excluir transação (soft delete)
 GET    /api/transactions/{id}/history # Histórico de alterações
+```
+
+**Resposta de paginação:**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [...],
+    "pageNumber": 1,
+    "pageSize": 5,
+    "totalCount": 50,
+    "totalPages": 10,
+    "hasPreviousPage": false,
+    "hasNextPage": true
+  },
+  "message": "Transactions retrieved successfully."
+}
 ```
 
 ### Dashboard
@@ -233,7 +253,9 @@ GET    /api/health                    # Status da aplicação
 ## 🧪 Testes
 
 ### Cobertura
-- ✅ **70+ testes unitários** (xUnit + FluentAssertions)
+- ✅ **72+ testes unitários** (xUnit + FluentAssertions)
+  - Testes de paginação de transações
+  - Testes de handlers com logging
 - ✅ **Testes de integração** com Oracle em Docker
 - ✅ **Testes BDD** (Reqnroll/Gherkin em português)
 - ✅ **Testes de middleware** (Exceptions, Performance, Correlation)
