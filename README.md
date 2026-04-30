@@ -276,6 +276,7 @@ Cenário: Criar uma transação de despesa válida
 ## 📚 Documentação
 
 - 📖 [Estratégia de Logging Profissional](docs/LOGGING_STRATEGY.md)
+- 📖 [Paginação de Transações](docs/PAGINATION.md)
 - 📖 [Guia de Testes BDD](src/Backend/FinTrack.Backend.IntegrationTests/README.md)
 - 📖 [Arquitetura Backend](src/Backend/README.md)
 - 📖 [API Reference (Swagger)](https://localhost:5001/swagger)
