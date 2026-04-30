@@ -90,19 +90,17 @@ O projeto segue **Clean Architecture** e **Domain-Driven Design (DDD)**:
 FinTrack/
 ├── src/
 │   ├── Backend/
-│   │   ├── FinTrack.WebAPI/          # Controllers, Middlewares, Startup
-│   │   ├── FinTrack.Application/      # Handlers, Validações, DTOs
-│   │   ├── FinTrack.Domain/           # Entidades, Enums, Lógica de Negócio
-│   │   └── FinTrack.Infrastructure/   # DbContext, Migrations, Repositories
+│   │   ├── FinTrack.WebAPI/                      # Controllers, Middlewares, Startup
+│   │   ├── FinTrack.Application/                 # Handlers, Validações, DTOs
+│   │   ├── FinTrack.Domain/                      # Entidades, Enums, Lógica de Negócio
+│   │   ├── FinTrack.Infrastructure/              # DbContext, Migrations, Repositories
+│   │   ├── FinTrack.Backend.UnitTests/           # 70+ testes unitários (xUnit)
+│   │   └── FinTrack.Backend.IntegrationTests/    # Testes BDD (Reqnroll/Gherkin)
 │   └── Frontend/
-│       └── fintrack-ui/               # Aplicação Angular 20
-├── tests/
-│   └── Backend/
-│       ├── FinTrack.Backend.UnitTests/         # 70+ testes unitários (xUnit)
-│       └── FinTrack.Backend.IntegrationTests/  # Testes BDD (Reqnroll/Gherkin)
-├── docker/                            # Docker Compose (Oracle 21c)
-├── docs/                              # Documentação técnica
-└── logs/                              # Logs estruturados (gitignored)
+│       └── fintrack-ui/                          # Aplicação Angular 20
+├── docker/                                       # Docker Compose (Oracle 21c)
+├── docs/                                         # Documentação técnica
+└── logs/                                         # Logs estruturados (gitignored)
 ```
 
 ### Padrões de Design Implementados
@@ -256,7 +254,7 @@ Cenário: Criar uma transação de despesa válida
 ## 📚 Documentação
 
 - 📖 [Estratégia de Logging Profissional](docs/LOGGING_STRATEGY.md)
-- 📖 [Guia de Testes BDD](tests/Backend/FinTrack.Backend.IntegrationTests/README.md)
+- 📖 [Guia de Testes BDD](src/Backend/FinTrack.Backend.IntegrationTests/README.md)
 - 📖 [Arquitetura Backend](src/Backend/README.md)
 - 📖 [API Reference (Swagger)](https://localhost:5001/swagger)
 
