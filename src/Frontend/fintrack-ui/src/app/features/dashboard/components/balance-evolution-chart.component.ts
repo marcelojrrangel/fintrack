@@ -1,0 +1,70 @@
+import { Component, computed, input } from '@angular/core';
+import { ChartConfiguration } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+
+import { BalanceEvolutionPoint } from '../../../core/models/dashboard.model';
+
+@Component({
+  selector: 'app-balance-evolution-chart',
+  standalone: true,
+  imports: [BaseChartDirective],
+  template: `
+    <section class="glass-panel rounded-4 p-4 chart-panel h-100">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <p class="section-title mb-2">Evolucao do saldo</p>
+          <h2 class="h4 mb-0">Saldo por periodo</h2>
+        </div>
+        <span class="badge rounded-pill text-bg-dark border border-secondary-subtle">Chart.js</span>
+      </div>
+
+      @if (points().length > 0) {
+        <canvas baseChart [type]="'line'" [data]="chartData()" [options]="chartOptions"></canvas>
+      } @else {
+        <div class="rounded-4 border border-secondary-subtle p-5 text-center text-muted-soft">
+          Nenhum dado suficiente para desenhar a evolucao do saldo.
+        </div>
+      }
+    </section>
+  `
+})
+export class BalanceEvolutionChartComponent {
+  readonly points = input<BalanceEvolutionPoint[]>([]);
+
+  readonly chartData = computed<ChartConfiguration<'line'>['data']>(() => ({
+    labels: this.points().map((point) => point.label),
+    datasets: [
+      {
+        label: 'Saldo acumulado',
+        data: this.points().map((point) => point.balance),
+        borderColor: '#818cf8',
+        backgroundColor: 'rgba(129, 140, 248, 0.18)',
+        fill: true,
+        tension: 0.32,
+        pointBackgroundColor: '#818cf8',
+        pointBorderColor: '#1e1b4b',
+        pointRadius: 4
+      }
+    ]
+  }));
+
+  readonly chartOptions: ChartConfiguration<'line'>['options'] = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#94a3b8' },
+        grid: { display: false }
+      },
+      y: {
+        ticks: { color: '#94a3b8' },
+        grid: { color: 'rgba(148, 163, 184, 0.12)' }
+      }
+    }
+  };
+}

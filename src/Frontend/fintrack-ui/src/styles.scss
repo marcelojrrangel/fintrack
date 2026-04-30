@@ -1,0 +1,88 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root {
+  color-scheme: dark;
+  --fintrack-surface: #0d1b2a;
+  --fintrack-border: rgba(148, 163, 184, 0.16);
+  --fintrack-text: #e2e8f0;
+  --fintrack-muted: #94a3b8;
+}
+
+html,
+body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top, rgba(79, 70, 229, 0.2), transparent 30%),
+    linear-gradient(180deg, #07111f 0%, #020617 100%);
+  color: var(--fintrack-text);
+}
+
+body {
+  margin: 0;
+  font-family:
+    Inter,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+.card,
+.modal-content,
+.table,
+.form-control,
+.form-select {
+  --bs-body-bg: var(--fintrack-surface);
+  --bs-body-color: var(--fintrack-text);
+  --bs-border-color: var(--fintrack-border);
+}
+
+.glass-panel {
+  background: linear-gradient(180deg, rgba(13, 27, 42, 0.92), rgba(15, 23, 42, 0.94));
+  border: 1px solid var(--fintrack-border);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 25px 80px rgba(2, 6, 23, 0.45);
+}
+
+.section-title {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fintrack-muted);
+  font-size: 0.78rem;
+}
+
+.btn-soft {
+  background: rgba(148, 163, 184, 0.12);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  color: var(--fintrack-text);
+}
+
+.btn-soft:hover {
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--fintrack-text);
+}
+
+.table-dark {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: rgba(148, 163, 184, 0.04);
+  --bs-table-hover-bg: rgba(99, 102, 241, 0.08);
+  --bs-table-border-color: var(--fintrack-border);
+}
+
+.text-muted-soft {
+  color: var(--fintrack-muted) !important;
+}
+
+.chart-panel canvas {
+  max-height: 320px;
+}
+
+.nav-link-active {
+  background-color: #4f46e5 !important; /* Cor primária sólida */
+  color: #ffffff !important;
+  opacity: 1 !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}

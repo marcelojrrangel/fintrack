@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Backend/">
+    <File Path="src/Backend/README.md" />
+    <Project Path="src/Backend/FinTrack.Application/FinTrack.Application.csproj" />
+    <Project Path="src/Backend/FinTrack.Domain/FinTrack.Domain.csproj" />
+    <Project Path="src/Backend/FinTrack.Infrastructure/FinTrack.Infrastructure.csproj" />
+    <Project Path="src/Backend/FinTrack.WebAPI/FinTrack.WebAPI.csproj" />
+    <Project Path="src/Backend/FinTrack.Backend.UnitTests/FinTrack.Backend.UnitTests.csproj" Type="TestProject" />
+    <Project Path="src/Backend/FinTrack.Backend.IntegrationTests/FinTrack.Backend.IntegrationTests.csproj" Type="TestProject" />
+  </Folder>
+</Solution>

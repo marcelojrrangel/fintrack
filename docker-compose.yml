@@ -1,0 +1,22 @@
+services:
+  fintrack-oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: fintrack-oracle
+    environment:
+      ORACLE_PASSWORD: fintrack123
+      APP_USER: fintrack
+      APP_USER_PASSWORD: fintrack123
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    volumes:
+      - fintrack-oracle-data:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+
+volumes:
+  fintrack-oracle-data:
