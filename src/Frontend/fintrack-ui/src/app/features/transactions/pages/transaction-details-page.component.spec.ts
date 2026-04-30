@@ -19,7 +19,17 @@ describe('TransactionDetailsPageComponent', () => {
 
     transactionsApi.getTransactionById.and.returnValue(of(transactionsMock[0]));
     transactionsApi.getTransactionHistory.and.returnValue(of(historyMock));
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 5,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
 
     TestBed.configureTestingModule({
       imports: [TransactionDetailsPageComponent],
@@ -60,7 +70,17 @@ describe('TransactionDetailsPageComponent', () => {
       throwError(() => new Error('detail error')),
     );
     transactionsApi.getTransactionHistory.and.returnValue(of(historyMock));
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 5,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
 
     TestBed.configureTestingModule({
       imports: [TransactionDetailsPageComponent],

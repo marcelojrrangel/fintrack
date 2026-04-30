@@ -9,6 +9,7 @@ import {
   historyMock,
   transactionsMock,
 } from '../../testing/frontend-test-data';
+import { PagedResponse } from '../models/pagination.model';
 import { TransactionHistoryEntry } from '../models/transaction-history.model';
 import { FinTransaction, TransactionMutationPayload } from '../models/transaction.model';
 import { TransactionsApiService } from './transactions-api.service';
@@ -31,23 +32,33 @@ describe('TransactionsApiService', () => {
   });
 
   it('should get all transactions', () => {
-    let responseValue: FinTransaction[] = [];
+    let responseValue: PagedResponse<FinTransaction> | null = null;
 
     service.getTransactions().subscribe((response) => {
       responseValue = response;
     });
 
-    const request = httpMock.expectOne('/api/transactions');
+    const request = httpMock.expectOne((req) => req.url.includes('/api/transactions') && req.params.has('pageNumber'));
     expect(request.request.method).toBe('GET');
+
+    const pagedData = {
+      items: transactionsMock,
+      pageNumber: 1,
+      pageSize: 5,
+      totalCount: transactionsMock.length,
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    };
 
     request.flush({
       success: true,
       message: 'ok',
-      data: transactionsMock,
+      data: pagedData,
       errors: [],
     });
 
-    expect(responseValue).toEqual(transactionsMock);
+    expect(responseValue!).toEqual(pagedData);
   });
 
   it('should create a transaction', () => {

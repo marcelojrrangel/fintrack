@@ -14,7 +14,17 @@ describe('TransactionsPageComponent', () => {
       ['getTransactions', 'createTransaction'],
     );
 
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 5,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
     transactionsApi.createTransaction.and.returnValue(of(transactionsMock[0]));
 
     TestBed.configureTestingModule({
@@ -39,7 +49,16 @@ describe('TransactionsPageComponent', () => {
       ['getTransactions', 'createTransaction'],
     );
 
-    transactionsApi.getTransactions.and.returnValues(of(transactionsMock), of(transactionsMock));
+    const pagedResponse = {
+      items: transactionsMock,
+      pageNumber: 1,
+      pageSize: 5,
+      totalCount: transactionsMock.length,
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false,
+    };
+    transactionsApi.getTransactions.and.returnValues(of(pagedResponse), of(pagedResponse));
     transactionsApi.createTransaction.and.returnValue(of(transactionsMock[0]));
 
     TestBed.configureTestingModule({
@@ -72,7 +91,17 @@ describe('TransactionsPageComponent', () => {
       ['getTransactions', 'createTransaction'],
     );
 
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 5,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
     transactionsApi.createTransaction.and.returnValue(
       throwError(() => new Error('create error')),
     );

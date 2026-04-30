@@ -4,7 +4,6 @@ import { firstValueFrom } from 'rxjs';
 import { DEFAULT_CATEGORIES } from '../../../core/constants/default-categories';
 import { CategoryOption } from '../../../core/models/category.model';
 import { FinTransaction, TransactionMutationPayload } from '../../../core/models/transaction.model';
-import { PagedResponse } from '../../../core/models/pagination.model';
 import { TransactionsApiService } from '../../../core/services/transactions-api.service';
 import { TransactionFormModalComponent } from '../components/transaction-form-modal.component';
 import { TransactionTableComponent } from '../components/transaction-table.component';
@@ -18,7 +17,11 @@ import { TransactionsToolbarComponent } from '../components/transactions-toolbar
     <app-transactions-toolbar
       [categories]="categories()"
       [selectedCategoryId]="selectedCategoryId()"
+      [searchTerm]="searchTerm()"
+      [selectedDate]="selectedDate()"
       (categoryChanged)="selectedCategoryId.set($event)"
+      (searchChanged)="searchTerm.set($event)"
+      (dateChanged)="selectedDate.set($event)"
       (createRequested)="isCreateModalOpen.set(true)"
       (refreshRequested)="refresh()"
     />
@@ -66,6 +69,8 @@ export class TransactionsPageComponent {
 
   readonly transactions = signal<FinTransaction[]>([]);
   readonly selectedCategoryId = signal('all');
+  readonly searchTerm = signal('');
+  readonly selectedDate = signal('');
   readonly isCreateModalOpen = signal(false);
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -94,13 +99,23 @@ export class TransactionsPageComponent {
   });
 
   readonly filteredTransactions = computed(() => {
+    const transactions = this.transactions();
     const selectedCategoryId = this.selectedCategoryId();
+    const searchTerm = this.searchTerm().toLowerCase();
+    const selectedDate = this.selectedDate();
 
-    if (selectedCategoryId === 'all') {
-      return this.transactions();
-    }
+    return transactions.filter((transaction) => {
+      const matchesCategory =
+        selectedCategoryId === 'all' || transaction.categoryId === selectedCategoryId;
 
-    return this.transactions().filter((transaction) => transaction.categoryId === selectedCategoryId);
+      const matchesDescription =
+        !searchTerm || transaction.description.toLowerCase().includes(searchTerm);
+
+      const transactionDate = new Date(transaction.transactionDateUtc).toISOString().split('T')[0];
+      const matchesDate = !selectedDate || transactionDate === selectedDate;
+
+      return matchesCategory && matchesDescription && matchesDate;
+    });
   });
 
   constructor() {

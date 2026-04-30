@@ -21,7 +21,17 @@ describe('DashboardPageComponent', () => {
     );
 
     dashboardApi.getDashboard.and.returnValue(of(dashboardSummaryMock));
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 50,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
 
     TestBed.configureTestingModule({
       imports: [DashboardPageComponent],
@@ -54,7 +64,17 @@ describe('DashboardPageComponent', () => {
     dashboardApi.getDashboard.and.returnValue(
       throwError(() => new Error('dashboard error')),
     );
-    transactionsApi.getTransactions.and.returnValue(of(transactionsMock));
+    transactionsApi.getTransactions.and.returnValue(
+      of({
+        items: transactionsMock,
+        pageNumber: 1,
+        pageSize: 50,
+        totalCount: transactionsMock.length,
+        totalPages: 1,
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+    );
 
     TestBed.configureTestingModule({
       imports: [DashboardPageComponent],
