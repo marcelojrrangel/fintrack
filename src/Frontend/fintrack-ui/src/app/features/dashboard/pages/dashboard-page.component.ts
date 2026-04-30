@@ -92,13 +92,13 @@ export class DashboardPageComponent {
     this.error.set(null);
 
     try {
-      const [dashboard, transactions] = await Promise.all([
+      const [dashboard, transactionsPaged] = await Promise.all([
         firstValueFrom(this.dashboardApi.getDashboard()),
-        firstValueFrom(this.transactionsApi.getTransactions())
+        firstValueFrom(this.transactionsApi.getTransactions({ pageNumber: 1, pageSize: 50 }))
       ]);
 
       this.dashboard.set(dashboard);
-      this.transactions.set(transactions);
+      this.transactions.set(transactionsPaged.items);
       this.lastUpdated.set(new Date());
     } catch {
       this.error.set('Nao foi possivel carregar os dados do dashboard. Verifique se a API esta em execucao.');

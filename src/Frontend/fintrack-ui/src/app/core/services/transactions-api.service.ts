@@ -2,17 +2,26 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiResponse } from '../models/api-response.model';
+import { PagedResponse, PaginationParams } from '../models/pagination.model';
 import { TransactionHistoryEntry } from '../models/transaction-history.model';
 import { FinTransaction, TransactionMutationPayload } from '../models/transaction.model';
 import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionsApiService extends ApiService {
-  getTransactions(): Observable<FinTransaction[]> {
+  getTransactions(params: PaginationParams = { pageNumber: 1, pageSize: 5 }): Observable<PagedResponse<FinTransaction>> {
+    const httpParams = {
+      ...this.requestOptions(),
+      params: {
+        pageNumber: params.pageNumber.toString(),
+        pageSize: params.pageSize.toString()
+      }
+    };
+
     return this.unwrap(
-      this.http.get<ApiResponse<FinTransaction[]>>(
+      this.http.get<ApiResponse<PagedResponse<FinTransaction>>>(
         this.buildUrl('transactions'),
-        this.requestOptions()
+        httpParams
       )
     );
   }

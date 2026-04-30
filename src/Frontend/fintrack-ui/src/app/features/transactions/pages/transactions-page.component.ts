@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { DEFAULT_CATEGORIES } from '../../../core/constants/default-categories';
 import { CategoryOption } from '../../../core/models/category.model';
 import { FinTransaction, TransactionMutationPayload } from '../../../core/models/transaction.model';
+import { PagedResponse } from '../../../core/models/pagination.model';
 import { TransactionsApiService } from '../../../core/services/transactions-api.service';
 import { TransactionFormModalComponent } from '../components/transaction-form-modal.component';
 import { TransactionTableComponent } from '../components/transaction-table.component';
@@ -27,6 +28,26 @@ import { TransactionsToolbarComponent } from '../components/transactions-toolbar
     }
 
     <app-transaction-table [transactions]="filteredTransactions()" />
+    
+    <nav class="d-flex justify-content-between align-items-center mt-4 glass-panel p-3 rounded-4">
+      <div class="text-muted-soft small">
+        Mostrando {{ transactions().length }} de {{ totalCount() }} transacoes 
+        (Pagina {{ pageNumber() }} de {{ totalPages() }})
+      </div>
+      
+      <ul class="pagination mb-0">
+        <li class="page-item" [class.disabled]="!hasPreviousPage()">
+          <button class="page-link bg-transparent border-secondary-subtle text-light" (click)="goToPage(pageNumber() - 1)">
+            <i class="bi bi-chevron-left me-1"></i> Anterior
+          </button>
+        </li>
+        <li class="page-item" [class.disabled]="!hasNextPage()">
+          <button class="page-link bg-transparent border-secondary-subtle text-light ms-2" (click)="goToPage(pageNumber() + 1)">
+            Proximo <i class="bi bi-chevron-right ms-1"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
 
     @if (isCreateModalOpen()) {
       <app-transaction-form-modal
@@ -49,6 +70,13 @@ export class TransactionsPageComponent {
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
   readonly modalError = signal<string | null>(null);
+
+  readonly pageNumber = signal(1);
+  readonly pageSize = signal(5);
+  readonly totalCount = signal(0);
+  readonly totalPages = signal(0);
+  readonly hasNextPage = signal(false);
+  readonly hasPreviousPage = signal(false);
 
   readonly categories = computed<CategoryOption[]>(() => {
     const categoriesMap = new Map(DEFAULT_CATEGORIES.map((category) => [category.id, category]));
@@ -78,8 +106,15 @@ export class TransactionsPageComponent {
   constructor() {
     effect(() => {
       this.refreshTick();
+      this.pageNumber();
       void this.loadTransactions();
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.pageNumber.set(page);
+    }
   }
 
   refresh(): void {
@@ -112,8 +147,18 @@ export class TransactionsPageComponent {
     this.error.set(null);
 
     try {
-      const transactions = await firstValueFrom(this.transactionsApi.getTransactions());
-      this.transactions.set(transactions);
+      const response = await firstValueFrom(
+        this.transactionsApi.getTransactions({
+          pageNumber: this.pageNumber(),
+          pageSize: this.pageSize()
+        })
+      );
+      
+      this.transactions.set(response.items);
+      this.totalCount.set(response.totalCount);
+      this.totalPages.set(response.totalPages);
+      this.hasNextPage.set(response.hasNextPage);
+      this.hasPreviousPage.set(response.hasPreviousPage);
     } catch {
       this.error.set('Nao foi possivel carregar a listagem de transacoes.');
     }

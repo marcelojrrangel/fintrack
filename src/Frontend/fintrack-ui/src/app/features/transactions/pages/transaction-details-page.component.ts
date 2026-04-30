@@ -134,15 +134,15 @@ export class TransactionDetailsPageComponent {
     this.error.set(null);
 
     try {
-      const [transaction, history, allTransactions] = await Promise.all([
+      const [transaction, history, allTransactionsPaged] = await Promise.all([
         firstValueFrom(this.transactionsApi.getTransactionById(transactionId)),
         firstValueFrom(this.transactionsApi.getTransactionHistory(transactionId)),
-        firstValueFrom(this.transactionsApi.getTransactions())
+        firstValueFrom(this.transactionsApi.getTransactions({ pageNumber: 1, pageSize: 100 }))
       ]);
 
       this.transaction.set(transaction);
       this.history.set(history);
-      this.allTransactions.set(allTransactions);
+      this.allTransactions.set(allTransactionsPaged.items);
     } catch {
       this.error.set('Nao foi possivel carregar os detalhes da transacao solicitada.');
       this.transaction.set(null);
