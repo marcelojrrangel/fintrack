@@ -23,10 +23,10 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
   template: `
     <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center mb-4">
       <div>
-        <p class="section-title mb-2">Detalhes da transacao</p>
-        <h1 class="h2 mb-1">Auditoria e distribuicao por categoria</h1>
+        <p class="section-title mb-2">Detalhes da transação</p>
+        <h1 class="h2 mb-1">Auditoria e distribuição por categoria</h1>
         <p class="text-muted-soft mb-0">
-          Acompanhe o contexto do lancamento e sua evolucao historica.
+          Acompanhe o contexto do lançamento e sua evolução histórica.
         </p>
       </div>
 
@@ -50,7 +50,7 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
       <section class="glass-panel rounded-4 p-4 mb-4">
         <div class="row g-4">
           <div class="col-12 col-lg-8">
-            <p class="section-title mb-2">Transacao selecionada</p>
+            <p class="section-title mb-2">Transação selecionada</p>
             <h2 class="h3 mb-2">{{ transactionData.description }}</h2>
             <p class="text-muted-soft mb-4">
               {{ transactionData.categoryName }} · {{ transactionData.transactionDateUtc | date: 'dd/MM/yyyy' }}
@@ -65,7 +65,7 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
               </div>
               <div class="rounded-4 border border-secondary-subtle px-3 py-2">
                 <small class="text-muted-soft d-block">Tipo</small>
-                <span class="fw-semibold">{{ transactionData.type === 'Income' ? 'Entrada' : 'Saida' }}</span>
+                <span class="fw-semibold">{{ transactionData.type === 'Income' ? 'Entrada' : 'Saída' }}</span>
               </div>
               <div class="rounded-4 border border-secondary-subtle px-3 py-2">
                 <small class="text-muted-soft d-block">Criado em</small>
@@ -78,7 +78,7 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
             <div class="rounded-4 border border-secondary-subtle p-4 h-100">
               <p class="section-title mb-2">Contexto</p>
               <div class="small text-muted-soft">
-                Este painel destaca a categoria do lancamento dentro da distribuicao total das transacoes cadastradas.
+                Este painel destaca a categoria do lançamento dentro da distribuição total das transações cadastradas.
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
       </div>
     } @else {
       <section class="glass-panel rounded-4 p-5 text-center text-muted-soft">
-        Nenhuma transacao foi localizada para este identificador.
+        Nenhuma transação foi localizada para este identificador.
       </section>
     }
   `
@@ -144,7 +144,7 @@ export class TransactionDetailsPageComponent {
       this.history.set(history);
       this.allTransactions.set(allTransactionsPaged.items);
     } catch {
-      this.error.set('Nao foi possivel carregar os detalhes da transacao solicitada.');
+      this.error.set('Não foi possível carregar os detalhes da transação solicitada.');
       this.transaction.set(null);
       this.history.set([]);
       this.allTransactions.set([]);

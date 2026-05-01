@@ -31,7 +31,7 @@ import { TransactionsApiService } from '../../../core/services/transactions-api.
 
       <div class="col-12 col-xl-4">
         <section class="glass-panel rounded-4 p-4 h-100">
-          <p class="section-title mb-2">Ultimas movimentacoes</p>
+          <p class="section-title mb-2">Últimas movimentações</p>
           <h2 class="h4 mb-4">Atividade recente</h2>
 
           @if (recentTransactions().length > 0) {
@@ -56,7 +56,7 @@ import { TransactionsApiService } from '../../../core/services/transactions-api.
             </div>
           } @else {
             <div class="rounded-4 border border-secondary-subtle p-5 text-center text-muted-soft">
-              Nenhuma transacao encontrada para exibir a atividade recente.
+               Nenhuma transação encontrada para exibir a atividade recente.
             </div>
           }
         </section>
@@ -101,7 +101,7 @@ export class DashboardPageComponent {
       this.transactions.set(transactionsPaged.items);
       this.lastUpdated.set(new Date());
     } catch {
-      this.error.set('Nao foi possivel carregar os dados do dashboard. Verifique se a API esta em execucao.');
+      this.error.set('Não foi possível carregar os dados do dashboard. Verifique se a API está em execução.');
     }
   }
 

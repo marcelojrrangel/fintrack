@@ -13,7 +13,7 @@ import { FinTransaction } from '../../../core/models/transaction.model';
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <p class="section-title mb-2">Lista</p>
-          <h2 class="h4 mb-0">Transacoes registradas</h2>
+          <h2 class="h4 mb-0">Transações registradas</h2>
         </div>
         <span class="badge rounded-pill text-bg-dark border border-secondary-subtle">{{ transactions().length }} itens</span>
       </div>
@@ -23,12 +23,12 @@ import { FinTransaction } from '../../../core/models/transaction.model';
           <table class="table table-dark align-middle mb-0">
             <thead>
               <tr>
-                <th>Descricao</th>
+                <th>Descrição</th>
                 <th>Categoria</th>
                 <th>Data</th>
                 <th>Tipo</th>
                 <th class="text-end">Valor</th>
-                <th class="text-end">Acoes</th>
+                <th class="text-end">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -61,7 +61,7 @@ import { FinTransaction } from '../../../core/models/transaction.model';
         </div>
       } @else {
         <div class="rounded-4 border border-secondary-subtle p-5 text-center text-muted-soft">
-          Nenhuma transacao corresponde ao filtro selecionado.
+          Nenhuma transação corresponde ao filtro selecionado.
         </div>
       }
     </section>

@@ -9,8 +9,8 @@ import { CategoryOption } from '../../../core/models/category.model';
     <section class="glass-panel rounded-4 p-4 mb-4">
       <div class="d-flex flex-column gap-4">
         <div>
-          <p class="section-title mb-2">Gestao de transacoes</p>
-          <h1 class="h2 mb-1">Lancamentos</h1>
+          <p class="section-title mb-2">Gestão de transações</p>
+          <h1 class="h2 mb-1">Lançamentos</h1>
           <p class="text-muted-soft mb-0">
             Filtre por categoria, crie novos registros e navegue ate os detalhes.
           </p>
@@ -22,7 +22,7 @@ import { CategoryOption } from '../../../core/models/category.model';
             <input
               type="text"
               class="form-control bg-transparent border-secondary-subtle ps-5"
-              placeholder="Buscar por descricao..."
+              placeholder="Buscar por descrição..."
               [value]="searchTerm()"
               (input)="onSearchChange($event)"
             />

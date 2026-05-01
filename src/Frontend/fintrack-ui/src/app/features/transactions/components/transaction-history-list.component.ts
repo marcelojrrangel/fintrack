@@ -10,7 +10,7 @@ import { TransactionHistoryEntry } from '../../../core/models/transaction-histor
   template: `
     <section class="glass-panel rounded-4 p-4 h-100">
       <p class="section-title mb-2">Auditoria</p>
-      <h2 class="h4 mb-4">Historico da transacao</h2>
+      <h2 class="h4 mb-4">Histórico da transação</h2>
 
       @if (history().length > 0) {
         <div class="d-flex flex-column gap-3">
@@ -32,7 +32,7 @@ import { TransactionHistoryEntry } from '../../../core/models/transaction-histor
                   <div class="col-12 col-lg-6">
                     <div class="rounded-3 bg-black bg-opacity-25 p-3 h-100">
                       <small class="text-muted-soft d-block mb-2">Estado anterior</small>
-                      <pre class="mb-0 small text-wrap text-break">{{ entry.previousValues || 'Sem alteracoes anteriores.' }}</pre>
+                      <pre class="mb-0 small text-wrap text-break">{{ entry.previousValues || 'Sem alterações anteriores.' }}</pre>
                     </div>
                   </div>
                   <div class="col-12 col-lg-6">
@@ -48,7 +48,7 @@ import { TransactionHistoryEntry } from '../../../core/models/transaction-histor
         </div>
       } @else {
         <div class="rounded-4 border border-secondary-subtle p-5 text-center text-muted-soft">
-          Nenhum evento de auditoria encontrado para esta transacao.
+          Nenhum evento de auditoria encontrado para esta transação.
         </div>
       }
     </section>

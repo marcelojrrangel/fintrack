@@ -34,8 +34,8 @@ import { TransactionsToolbarComponent } from '../components/transactions-toolbar
     
     <nav class="d-flex justify-content-between align-items-center mt-4 glass-panel p-3 rounded-4">
       <div class="text-muted-soft small">
-        Mostrando {{ transactions().length }} de {{ totalCount() }} transacoes 
-        (Pagina {{ pageNumber() }} de {{ totalPages() }})
+        Mostrando {{ transactions().length }} de {{ totalCount() }} transações 
+        (Página {{ pageNumber() }} de {{ totalPages() }})
       </div>
       
       <ul class="pagination mb-0">
@@ -46,7 +46,7 @@ import { TransactionsToolbarComponent } from '../components/transactions-toolbar
         </li>
         <li class="page-item" [class.disabled]="!hasNextPage()">
           <button class="page-link bg-transparent border-secondary-subtle text-light ms-2" (click)="goToPage(pageNumber() + 1)">
-            Proximo <i class="bi bi-chevron-right ms-1"></i>
+            Próximo <i class="bi bi-chevron-right ms-1"></i>
           </button>
         </li>
       </ul>
@@ -151,7 +151,7 @@ export class TransactionsPageComponent {
       this.refresh();
     } catch {
       this.modalError.set(
-        'Nao foi possivel salvar a nova transacao. Confira se a API esta ativa e tente novamente.'
+        'Não foi possível salvar a nova transação. Confira se a API está ativa e tente novamente.'
       );
     } finally {
       this.submitting.set(false);
@@ -175,7 +175,7 @@ export class TransactionsPageComponent {
       this.hasNextPage.set(response.hasNextPage);
       this.hasPreviousPage.set(response.hasPreviousPage);
     } catch {
-      this.error.set('Nao foi possivel carregar a listagem de transacoes.');
+      this.error.set('Não foi possível carregar a listagem de transações.');
     }
   }
 }

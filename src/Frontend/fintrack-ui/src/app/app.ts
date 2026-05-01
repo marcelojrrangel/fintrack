@@ -10,6 +10,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 export class App {
   protected readonly navItems = [
     { label: 'Dashboard', icon: 'bi-speedometer2', path: '/dashboard', exact: true },
-    { label: 'Transacoes', icon: 'bi-wallet2', path: '/transactions', exact: false }
+    { label: 'Transações', icon: 'bi-wallet2', path: '/transactions', exact: false }
   ];
 }
