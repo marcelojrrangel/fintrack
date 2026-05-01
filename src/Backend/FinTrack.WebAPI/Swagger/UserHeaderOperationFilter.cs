@@ -7,7 +7,9 @@ public sealed class UserHeaderOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        if (context.ApiDescription.RelativePath?.StartsWith("api/health", StringComparison.OrdinalIgnoreCase) == true)
+        var path = context.ApiDescription.RelativePath ?? string.Empty;
+        if (path.StartsWith("api/health", StringComparison.OrdinalIgnoreCase) ||
+            path.StartsWith("api/users", StringComparison.OrdinalIgnoreCase))
         {
             return;
         }

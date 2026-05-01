@@ -1,11 +1,12 @@
 import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { TransactionHistoryEntry } from '../../../core/models/transaction-history.model';
 import { FinTransaction } from '../../../core/models/transaction.model';
 import { TransactionsApiService } from '../../../core/services/transactions-api.service';
+import { TransactionStateService } from '../pages/transaction-state.service';
 import { CategoryBreakdownChartComponent } from '../components/category-breakdown-chart.component';
 import { TransactionHistoryListComponent } from '../components/transaction-history-list.component';
 
@@ -31,6 +32,14 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
       </div>
 
       <div class="d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-danger" (click)="deleteTransaction()" [disabled]="deleting()">
+          @if (deleting()) {
+            <span class="spinner-border spinner-border-sm me-2"></span>
+          } @else {
+            <i class="bi bi-trash me-2"></i>
+          }
+          Excluir
+        </button>
         <button type="button" class="btn btn-outline-light" (click)="refresh()">
           <i class="bi bi-arrow-clockwise me-2"></i>
           Atualizar
@@ -106,13 +115,16 @@ import { TransactionHistoryListComponent } from '../components/transaction-histo
 })
 export class TransactionDetailsPageComponent {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly transactionsApi = inject(TransactionsApiService);
+  private readonly state = inject(TransactionStateService);
   private readonly refreshTick = signal(0);
 
   readonly transaction = signal<FinTransaction | null>(null);
   readonly allTransactions = signal<FinTransaction[]>([]);
   readonly history = signal<TransactionHistoryEntry[]>([]);
   readonly error = signal<string | null>(null);
+  readonly deleting = signal(false);
 
   private readonly transactionId = computed(() => this.route.snapshot.paramMap.get('id') ?? '');
 
@@ -128,6 +140,27 @@ export class TransactionDetailsPageComponent {
 
   refresh(): void {
     this.refreshTick.update((current) => current + 1);
+  }
+
+  async deleteTransaction(): Promise<void> {
+    const transaction = this.transaction();
+    if (!transaction) return;
+
+    if (!confirm(`Tem certeza que deseja excluir a transação "${transaction.description}"?`)) {
+      return;
+    }
+
+    this.deleting.set(true);
+    this.error.set(null);
+
+    try {
+      await firstValueFrom(this.transactionsApi.deleteTransaction(transaction.id));
+      this.state.setPendingDeleteId(transaction.id);
+      void this.router.navigateByUrl('/transactions');
+    } catch {
+      this.error.set('Não foi possível excluir a transação no momento. Verifique se a API está ativa.');
+      this.deleting.set(false);
+    }
   }
 
   private async loadTransactionDetails(transactionId: string): Promise<void> {

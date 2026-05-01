@@ -5,9 +5,9 @@ import { TransactionDetailsPageComponent } from './features/transactions/pages/t
 import { TransactionsPageComponent } from './features/transactions/pages/transactions-page.component';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: 'transactions' },
   { path: 'dashboard', component: DashboardPageComponent },
   { path: 'transactions', component: TransactionsPageComponent },
   { path: 'transactions/:id', component: TransactionDetailsPageComponent },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'transactions' }
 ];

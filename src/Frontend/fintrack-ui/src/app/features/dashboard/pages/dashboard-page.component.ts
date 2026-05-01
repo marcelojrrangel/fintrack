@@ -8,12 +8,43 @@ import { DashboardSummary, BalanceEvolutionPoint } from '../../../core/models/da
 import { FinTransaction } from '../../../core/models/transaction.model';
 import { DashboardApiService } from '../../../core/services/dashboard-api.service';
 import { TransactionsApiService } from '../../../core/services/transactions-api.service';
+import { CurrentUserService } from '../../../core/services/current-user.service';
+import { UserPickerModalComponent } from '../../../core/components/user-picker-modal.component';
 
 @Component({
   selector: 'app-dashboard-page',
   standalone: true,
-  imports: [BalanceEvolutionChartComponent, CurrencyPipe, DashboardSummaryCardsComponent, DatePipe],
+  imports: [BalanceEvolutionChartComponent, CurrencyPipe, DashboardSummaryCardsComponent, DatePipe, UserPickerModalComponent],
   template: `
+      @if (!currentUserService.currentUser()) {
+        <div class="glass-panel rounded-4 p-5 text-center mb-4">
+          <i class="bi bi-person-circle display-4 text-muted-soft d-block mb-3"></i>
+          <h2 class="h4 mb-2">Selecione um usuário</h2>
+          <p class="text-muted-soft mb-0">
+            Acesse a página de <strong>Transações</strong> e selecione um usuário para visualizar o dashboard.
+          </p>
+        </div>
+      }
+
+      @if (currentUserService.currentUser(); as activeUser) {
+        <section class="glass-panel rounded-4 p-3 mb-4 border border-primary-subtle">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary-subtle text-primary-emphasis" style="width: 40px; height: 40px;">
+              <i class="bi bi-person-check"></i>
+            </div>
+            <div>
+              <p class="section-title mb-1">Usuário ativo</p>
+              <div class="fw-semibold">{{ activeUser.fullName }}</div>
+              <small class="text-muted-soft">{{ activeUser.email }}</small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-light ms-auto" (click)="isUserPickerOpen.set(true)">
+              <i class="bi bi-person-gear me-2"></i>
+              Trocar usuário
+            </button>
+          </div>
+        </section>
+      }
+
     <app-dashboard-summary-cards
       [dashboard]="dashboard()"
       [lastUpdated]="lastUpdated()"
@@ -62,17 +93,26 @@ import { TransactionsApiService } from '../../../core/services/transactions-api.
         </section>
       </div>
     </div>
+
+    @if (isUserPickerOpen()) {
+      <app-user-picker-modal
+        (closeRequested)="isUserPickerOpen.set(false)"
+        (userSelected)="isUserPickerOpen.set(false)"
+      />
+    }
   `
 })
 export class DashboardPageComponent {
   private readonly dashboardApi = inject(DashboardApiService);
   private readonly transactionsApi = inject(TransactionsApiService);
+  readonly currentUserService = inject(CurrentUserService);
   private readonly refreshTick = signal(0);
 
   readonly dashboard = signal<DashboardSummary | null>(null);
   readonly transactions = signal<FinTransaction[]>([]);
   readonly error = signal<string | null>(null);
   readonly lastUpdated = signal<Date | null>(null);
+  readonly isUserPickerOpen = signal(false);
 
   readonly recentTransactions = computed(() => this.transactions().slice(0, 5));
   readonly balanceEvolution = computed(() => this.toBalanceEvolution(this.transactions()));
@@ -80,7 +120,16 @@ export class DashboardPageComponent {
   constructor() {
     effect(() => {
       this.refreshTick();
-      void this.loadDashboard();
+        // React to user changes
+        this.currentUserService.currentUser();
+        if (this.currentUserService.currentUser()) {
+          void this.loadDashboard();
+        } else {
+          this.dashboard.set(null);
+          this.transactions.set([]);
+          this.lastUpdated.set(null);
+          this.error.set(null);
+        }
     });
   }
 
