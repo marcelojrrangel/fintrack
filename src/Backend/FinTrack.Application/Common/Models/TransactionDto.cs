@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FinTrack.Domain.Enums;
 
 namespace FinTrack.Application.Common.Models;
@@ -8,9 +9,9 @@ public sealed record TransactionDto(
     Guid CategoryId,
     string CategoryName,
     decimal Amount,
-    DateTime TransactionDateUtc,
-    TransactionType Type,
-    string Description,
+    [property: JsonPropertyName("transactionDateUtc")] DateTime TransactionDateUtc,
+    [property: JsonPropertyName("type")] TransactionType Type,
+    [property: JsonPropertyName("description")] string Description,
     bool IsDeleted,
     DateTime CreatedAtUtc,
     DateTime? UpdatedAtUtc);

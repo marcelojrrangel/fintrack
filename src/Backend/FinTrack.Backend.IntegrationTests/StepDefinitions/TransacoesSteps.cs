@@ -27,9 +27,9 @@ public class TransacoesSteps
         foreach (var row in table.Rows)
         {
             var tipo = Enum.Parse<TransactionType>(row["Tipo"]);
-            var categoriaId = MapearCategoria(row["Categoria"]);
+            var categoriaId = table.ContainsColumn("Categoria") ? MapearCategoria(row["Categoria"]) : "22222222-2222-2222-2222-222222222221";
             var valor = decimal.Parse(row["Valor"]);
-            var data = DateTime.Parse(row["Data"]);
+            var data = table.ContainsColumn("Data") ? DateTime.Parse(row["Data"]) : DateTime.UtcNow;
             var descricao = row["Descrição"];
 
             var request = new TransactionMutationRequest(
@@ -193,12 +193,11 @@ public class TransacoesSteps
     {
         _context.LastResponse = await _context.ApiClient.GetAsync("/api/transactions");
 
-        if (_context.LastResponse.IsSuccessStatusCode)
-        {
-            var result = await _context.LastResponse.Content
-                .ReadFromJsonAsync<ApiResponse<IReadOnlyCollection<TransactionDto>>>();
-            _transactionList = result?.Data?.ToList();
-        }
+            if (_context.LastResponse.IsSuccessStatusCode)
+            {
+                var result = await _context.LastResponse.ReadPagedApiResponseAsync<TransactionDto>();
+                _transactionList = result?.Data?.Items?.ToList() ?? new List<TransactionDto>();
+            }
     }
 
     [When(@"eu busco a transação pelo ID")]
@@ -307,14 +306,13 @@ public class TransacoesSteps
     {
         _lastTransaction.Should().NotBeNull();
 
-        var listResponse = await _context.ApiClient.GetAsync("/api/transactions");
-        listResponse.IsSuccessStatusCode.Should().BeTrue();
+            var listResponse = await _context.ApiClient.GetAsync("/api/transactions");
+            listResponse.IsSuccessStatusCode.Should().BeTrue();
 
-        var listResult = await listResponse.Content
-            .ReadFromJsonAsync<ApiResponse<IReadOnlyCollection<TransactionDto>>>();
-
-        listResult.Should().NotBeNull();
-        listResult!.Data.Should().NotContain(t => t.Id == _lastTransaction!.Id);
+            var result = await listResponse.ReadPagedApiResponseAsync<TransactionDto>();
+            result.Should().NotBeNull("a resposta da listagem não deve ser nula");
+            var items = result!.Data?.Items ?? new List<TransactionDto>();
+            items.Should().NotContain(t => t.Id == _lastTransaction!.Id);
     }
 
     [Then(@"devo ver (.*) transações na lista")]

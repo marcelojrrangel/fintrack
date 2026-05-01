@@ -15,7 +15,8 @@ public abstract class TransactionCommandValidator<TCommand> : AbstractValidator<
             .GreaterThan(0);
 
         RuleFor(command => command.TransactionDateUtc)
-            .NotEmpty();
+            .NotEmpty()
+            .WithName("TransactionDateUtc");
 
         RuleFor(command => command.Type)
             .IsInEnum()

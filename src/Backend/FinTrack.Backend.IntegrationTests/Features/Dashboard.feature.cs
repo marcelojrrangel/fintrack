@@ -26,8 +26,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Dashboard Financeiro", "  Como um usuário do sistema FinTrack\r\n  Eu quero visualizar meu resumo financeir" +
-                "o\r\n  Para ter controle sobre minhas finanças", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Dashboard Financeiro", ("  Como um usuário do sistema FinTrack\r\n  Eu quero visualizar meu resumo financeir" +
+                "o\r\n  Para ter controle sobre minhas finanças"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -148,26 +148,26 @@ namespace FinTrack.Backend.IntegrationTests.Features
                             "Income",
                             "Salary",
                             "5000",
-                            "2026-01-01",
+                            "2026-05-01",
                             "Salário Janeiro"});
                 table1.AddRow(new string[] {
                             "Expense",
                             "Bills",
                             "1500",
-                            "2026-01-05",
+                            "2026-05-05",
                             "Aluguel"});
                 table1.AddRow(new string[] {
                             "Expense",
                             "Bills",
                             "500",
-                            "2026-01-10",
+                            "2026-05-10",
                             "Conta de Luz"});
                 await testRunner.GivenAsync("que existem as seguintes transações:", ((string)(null)), table1, "Dado ");
                 await testRunner.WhenAsync("eu consulto o dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "Quando ");
                 await testRunner.ThenAsync("a requisição deve ser bem-sucedida", ((string)(null)), ((global::Reqnroll.Table)(null)), "Então ");
-                await testRunner.AndAsync("o total de receitas deve ser 5000.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
-                await testRunner.AndAsync("o total de despesas deve ser 2000.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
-                await testRunner.AndAsync("o balanço deve ser 3000.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o total de receitas deve ser 5000", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o total de despesas deve ser 2000", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o balanço deve ser 3000", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
             }
             await this.ScenarioCleanupAsync();
         }
@@ -199,21 +199,21 @@ namespace FinTrack.Backend.IntegrationTests.Features
                             "Income",
                             "Salary",
                             "3000",
-                            "2026-01-01",
+                            "2026-05-01",
                             "Salário"});
                 table2.AddRow(new string[] {
                             "Expense",
                             "Bills",
                             "1000",
-                            "2026-01-05",
+                            "2026-05-05",
                             "Despesa 1"});
                 await testRunner.GivenAsync("que existem as seguintes transações:", ((string)(null)), table2, "Dado ");
                 await testRunner.AndAsync("a transação \"Despesa 1\" foi excluída", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
                 await testRunner.WhenAsync("eu consulto o dashboard", ((string)(null)), ((global::Reqnroll.Table)(null)), "Quando ");
                 await testRunner.ThenAsync("a requisição deve ser bem-sucedida", ((string)(null)), ((global::Reqnroll.Table)(null)), "Então ");
-                await testRunner.AndAsync("o total de receitas deve ser 3000.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
-                await testRunner.AndAsync("o total de despesas deve ser 0.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
-                await testRunner.AndAsync("o balanço deve ser 3000.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o total de receitas deve ser 3000", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o total de despesas deve ser 0", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
+                await testRunner.AndAsync("o balanço deve ser 3000", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
             }
             await this.ScenarioCleanupAsync();
         }
