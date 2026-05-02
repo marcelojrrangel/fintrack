@@ -49,7 +49,7 @@ public sealed class ControllerTests
             .Returns(new[] { new TransactionHistoryDto(Guid.NewGuid(), transaction.Id, HistoryActionType.Created, "Created", null, null, DateTime.UtcNow) });
         var controller = new TransactionsController(sender);
 
-        (await controller.GetAll(1, 5, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
+        (await controller.GetAll(1, 5, cancellationToken: CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
         (await controller.GetById(transaction.Id, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
         (await controller.GetHistory(transaction.Id, CancellationToken.None)).Result.Should().BeOfType<OkObjectResult>();
     }

@@ -26,8 +26,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Dashboard Financeiro", ("  Como um usuário do sistema FinTrack\r\n  Eu quero visualizar meu resumo financeir" +
-                "o\r\n  Para ter controle sobre minhas finanças"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Dashboard Financeiro", "  Como um usuário do sistema FinTrack\r\n  Eu quero visualizar meu resumo financeir" +
+                "o\r\n  Para ter controle sobre minhas finanças", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
