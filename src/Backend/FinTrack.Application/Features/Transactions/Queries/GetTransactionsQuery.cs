@@ -4,10 +4,20 @@ using FinTrack.Application.Common.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using FinTrack.Domain.Enums;
 
 namespace FinTrack.Application.Features.Transactions.Queries;
 
-public sealed record GetTransactionsQuery(int PageNumber = 1, int PageSize = 5) : IRequest<PagedResponse<TransactionDto>>;
+public sealed record GetTransactionsQuery(
+    int PageNumber = 1, 
+    int PageSize = 5,
+    string? Description = null,
+    Guid? CategoryId = null,
+    DateTime? DateFrom = null,
+    DateTime? DateTo = null,
+    string? Type = null,
+    decimal? MinAmount = null,
+    decimal? MaxAmount = null) : IRequest<PagedResponse<TransactionDto>>;
 
 public sealed class GetTransactionsQueryHandler : IRequestHandler<GetTransactionsQuery, PagedResponse<TransactionDto>>
 {
@@ -31,42 +41,73 @@ public sealed class GetTransactionsQueryHandler : IRequestHandler<GetTransaction
         await UserGuard.EnsureExistsAsync(_dbContext, userId, cancellationToken);
 
         _logger.LogInformation(
-            "Buscando transações paginadas para o usuário. UserId: {UserId}, PageNumber: {PageNumber}, PageSize: {PageSize}",
-            userId, request.PageNumber, request.PageSize);
+            "Buscando transações filtradas para o usuário. UserId: {UserId}, Page: {PageNumber}",
+            userId, request.PageNumber);
 
         var query = _dbContext.Transactions
             .AsNoTracking()
-            .Where(transaction => transaction.UserId == userId && !transaction.IsDeleted);
+            .Where(t => t.UserId == userId && !t.IsDeleted);
+
+        // Aplicação de filtros dinâmicos
+        if (!string.IsNullOrWhiteSpace(request.Description))
+        {
+            query = query.Where(t => t.Description.ToLower().Contains(request.Description.ToLower()));
+        }
+
+        if (request.CategoryId.HasValue)
+        {
+            query = query.Where(t => t.CategoryId == request.CategoryId.Value);
+        }
+
+        if (request.DateFrom.HasValue)
+        {
+            query = query.Where(t => t.TransactionDateUtc >= request.DateFrom.Value);
+        }
+
+        if (request.DateTo.HasValue)
+        {
+            query = query.Where(t => t.TransactionDateUtc <= request.DateTo.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Type) && Enum.TryParse<TransactionType>(request.Type, out var typeEnum))
+        {
+            query = query.Where(t => t.Type == typeEnum);
+        }
+
+        if (request.MinAmount.HasValue)
+        {
+            query = query.Where(t => t.Amount >= request.MinAmount.Value);
+        }
+
+        if (request.MaxAmount.HasValue)
+        {
+            query = query.Where(t => t.Amount <= request.MaxAmount.Value);
+        }
 
         var totalCount = await query.CountAsync(cancellationToken);
 
         if (totalCount == 0)
         {
-            _logger.LogInformation("Nenhuma transação encontrada para o usuário. UserId: {UserId}", userId);
             return PagedResponse<TransactionDto>.Empty(request.PageNumber, request.PageSize);
         }
 
         var items = await query
-            .OrderByDescending(transaction => transaction.TransactionDateUtc)
+            .OrderByDescending(t => t.TransactionDateUtc)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
-            .Select(transaction => new TransactionDto(
-                transaction.Id,
-                transaction.UserId,
-                transaction.CategoryId,
-                transaction.Category != null ? transaction.Category.Name : string.Empty,
-                transaction.Amount,
-                transaction.TransactionDateUtc,
-                transaction.Type,
-                transaction.Description,
-                transaction.IsDeleted,
-                transaction.CreatedAtUtc,
-                transaction.UpdatedAtUtc))
+            .Select(t => new TransactionDto(
+                t.Id,
+                t.UserId,
+                t.CategoryId,
+                t.Category != null ? t.Category.Name : string.Empty,
+                t.Amount,
+                t.TransactionDateUtc,
+                t.Type,
+                t.Description,
+                t.IsDeleted,
+                t.CreatedAtUtc,
+                t.UpdatedAtUtc))
             .ToListAsync(cancellationToken);
-
-        _logger.LogInformation(
-            "Transações recuperadas com sucesso. UserId: {UserId}, TotalCount: {TotalCount}, ItemsReturned: {ItemsReturned}",
-            userId, totalCount, items.Count);
 
         return PagedResponse<TransactionDto>.Create(items, totalCount, request.PageNumber, request.PageSize);
     }

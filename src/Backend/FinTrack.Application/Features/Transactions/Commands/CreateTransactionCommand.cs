@@ -99,7 +99,7 @@ public sealed class CreateTransactionCommandHandler : IRequestHandler<CreateTran
 
             return TransactionMapping.ToDto(transaction, category.Name);
         }
-        catch (NotFoundException ex)
+        catch (NotFoundException)
         {
             // Já logado acima, apenas propagar
             throw;

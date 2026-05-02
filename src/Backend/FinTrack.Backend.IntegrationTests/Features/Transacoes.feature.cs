@@ -26,8 +26,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Gerenciamento de Transações", "  Como um usuário do sistema FinTrack\r\n  Eu quero gerenciar minhas transações fin" +
-                "anceiras\r\n  Para manter meu histórico financeiro organizado", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Gerenciamento de Transações", ("  Como um usuário do sistema FinTrack\r\n  Eu quero gerenciar minhas transações fin" +
+                "anceiras\r\n  Para manter meu histórico financeiro organizado"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -198,8 +198,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
             {
                 await this.ScenarioStartAsync();
                 await this.FeatureBackgroundAsync();
-                await testRunner.GivenAsync("que existe uma transação de despesa no valor de 1000.00 com descrição \"Despesa Or" +
-                        "iginal\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Dado ");
+                await testRunner.GivenAsync(("que existe uma transação de despesa no valor de 1000.00 com descrição \"Despesa Or" +
+                        "iginal\""), ((string)(null)), ((global::Reqnroll.Table)(null)), "Dado ");
                 await testRunner.WhenAsync("eu atualizo o valor para 1500.00", ((string)(null)), ((global::Reqnroll.Table)(null)), "Quando ");
                 await testRunner.AndAsync("eu atualizo a descrição para \"Aluguel Atualizado\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "E ");
                 await testRunner.ThenAsync("a transação deve ser atualizada com sucesso", ((string)(null)), ((global::Reqnroll.Table)(null)), "Então ");

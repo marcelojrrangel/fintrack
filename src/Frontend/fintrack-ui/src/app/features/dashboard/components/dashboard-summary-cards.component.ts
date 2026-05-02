@@ -42,17 +42,15 @@ import { DashboardSummary } from '../../../core/models/dashboard.model';
 
           <div class="col-12 col-md-4">
             <article class="summary-card summary-card--income rounded-4 p-4 h-100">
-              <p class="section-title mb-3">Entradas do mes</p>
-              <h2 class="display-6 fw-semibold mb-2">{{ summary.totalIncomeMonth | currency: 'BRL':'symbol':'1.2-2' }}</h2>
-              <p class="text-muted-soft mb-0">Valores confirmados no periodo atual.</p>
+              <p class="section-title mb-3">Entradas do mês</p>
+              <h2 class="display-6 fw-semibold mb-2">{{ summary.totalIncomeMonth | currency: 'BRL':'symbol':'1.2-2' }}</h2>              
             </article>
           </div>
 
           <div class="col-12 col-md-4">
             <article class="summary-card summary-card--expense rounded-4 p-4 h-100">
-              <p class="section-title mb-3">Saidas do mes</p>
-              <h2 class="display-6 fw-semibold mb-2">{{ summary.totalExpenseMonth | currency: 'BRL':'symbol':'1.2-2' }}</h2>
-              <p class="text-muted-soft mb-0">Despesas registradas no periodo atual.</p>
+              <p class="section-title mb-3">Saídas do mês</p>
+              <h2 class="display-6 fw-semibold mb-2">{{ summary.totalExpenseMonth | currency: 'BRL':'symbol':'1.2-2' }}</h2>              
             </article>
           </div>
         } @else {

@@ -15,8 +15,8 @@ import { TransactionMutationPayload, TransactionType } from '../../../core/model
         <div class="modal-content glass-panel border-0 rounded-4">
           <div class="modal-header border-secondary-subtle">
             <div>
-              <p class="section-title mb-2">Nova transacao</p>
-              <h2 class="h4 mb-0">Registrar movimentacao</h2>
+              <p class="section-title mb-2">Nova transação</p>
+              <h2 class="h4 mb-0">Registrar movimentação</h2>
             </div>
             <button type="button" class="btn-close btn-close-white" aria-label="Fechar" (click)="closeRequested.emit()"></button>
           </div>
@@ -52,8 +52,8 @@ import { TransactionMutationPayload, TransactionType } from '../../../core/model
               </div>
 
               <div class="col-12">
-                <label class="form-label">Descricao</label>
-                <input type="text" class="form-control" maxlength="250" formControlName="description" placeholder="Ex.: Salario de abril" />
+                <label class="form-label">Descrição</label>
+                <input type="text" class="form-control" maxlength="250" formControlName="description" placeholder="Ex.: Salário de abril" />
               </div>
             </div>
 
@@ -70,7 +70,7 @@ import { TransactionMutationPayload, TransactionType } from '../../../core/model
               } @else {
                 <i class="bi bi-check2-circle me-2"></i>
               }
-              Salvar transacao
+              Salvar transação
             </button>
           </div>
         </div>

@@ -33,9 +33,27 @@ public sealed class TransactionsController : ControllerBase
     public async Task<ActionResult<ApiResponse<PagedResponse<TransactionDto>>>> GetAll(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 5,
+        [FromQuery] string? description = null,
+        [FromQuery] Guid? categoryId = null,
+        [FromQuery] DateTime? dateFrom = null,
+        [FromQuery] DateTime? dateTo = null,
+        [FromQuery] string? type = null,
+        [FromQuery] decimal? minAmount = null,
+        [FromQuery] decimal? maxAmount = null,
         CancellationToken cancellationToken = default)
     {
-        var result = await _sender.Send(new GetTransactionsQuery(pageNumber, pageSize), cancellationToken);
+        var query = new GetTransactionsQuery(
+            pageNumber, 
+            pageSize, 
+            description, 
+            categoryId, 
+            dateFrom, 
+            dateTo, 
+            type, 
+            minAmount, 
+            maxAmount);
+
+        var result = await _sender.Send(query, cancellationToken);
         return Ok(ApiResponse<PagedResponse<TransactionDto>>.Ok(result, "Transactions retrieved successfully."));
     }
 

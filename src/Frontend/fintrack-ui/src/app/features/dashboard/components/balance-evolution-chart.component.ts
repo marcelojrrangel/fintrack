@@ -44,6 +44,28 @@ export class BalanceEvolutionChartComponent {
         pointBackgroundColor: '#818cf8',
         pointBorderColor: '#1e1b4b',
         pointRadius: 4
+      },
+      {
+        label: 'Entradas',
+        data: this.points().map((point) => point.income),
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34, 197, 94, 0.12)',
+        fill: false,
+        tension: 0.32,
+        pointBackgroundColor: '#22c55e',
+        pointBorderColor: '#1e1b4b',
+        pointRadius: 4
+      },
+      {
+        label: 'Saídas',
+        data: this.points().map((point) => point.expense),
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245, 158, 11, 0.12)',
+        fill: false,
+        tension: 0.32,
+        pointBackgroundColor: '#f59e0b',
+        pointBorderColor: '#1e1b4b',
+        pointRadius: 4
       }
     ]
   }));
@@ -53,7 +75,12 @@ export class BalanceEvolutionChartComponent {
     responsive: true,
     plugins: {
       legend: {
-        display: false
+        display: true,
+        labels: {
+          color: '#94a3b8',
+          usePointStyle: true,
+          padding: 20
+        }
       }
     },
     scales: {

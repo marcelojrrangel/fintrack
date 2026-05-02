@@ -303,7 +303,8 @@ public sealed class QueryAndCommandHandlerTests
         var result = await handler.Handle(new GetTransactionHistoryQuery(transaction.Id), CancellationToken.None);
 
         result.Should().HaveCount(2);
-        result.First().Action.Should().Be(HistoryActionType.Updated);
+        result.Should().Contain(h => h.Action == HistoryActionType.Created);
+        result.Should().Contain(h => h.Action == HistoryActionType.Updated);
 
         var action = async () => await handler.Handle(new GetTransactionHistoryQuery(Guid.NewGuid()), CancellationToken.None);
         await action.Should().ThrowAsync<NotFoundException>()

@@ -193,17 +193,13 @@ cd src/Backend
 dotnet test
 
 # Apenas testes unitários (70+)
-dotnet test --filter "FullyQualifiedName~UnitTests"
+dotnet test src/Backend/FinTrack.Backend.UnitTests
 
 # Apenas testes de integração (BDD)
-dotnet test --filter "FullyQualifiedName~IntegrationTests"
+dotnet test src/Backend/FinTrack.Backend.IntegrationTests
 
 # Com cobertura de código
-dotnet test --collect:"XPlat Code Coverage"
-
-# Testes frontend
-cd src/Frontend/fintrack-ui
-npm test
+dotnet test src/Backend --collect:"XPlat Code Coverage"
 ```
 
 ## 📡 Endpoints da API

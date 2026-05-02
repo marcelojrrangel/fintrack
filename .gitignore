@@ -406,3 +406,6 @@ logs/*.json
 logs/*.txt
 logs/*.log
 !logs/.gitkeep
+
+# Local agent configuration (don't upload)
+AGENTS.md

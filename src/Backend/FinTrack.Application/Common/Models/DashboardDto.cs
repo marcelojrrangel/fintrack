@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
+
 namespace FinTrack.Application.Common.Models;
 
 public sealed record DashboardDto(
-    decimal CurrentBalance,
-    decimal TotalIncomeMonth,
-    decimal TotalExpenseMonth,
-    string CardColor);
+    [property: JsonPropertyName("currentBalance")] decimal CurrentBalance,
+    [property: JsonPropertyName("totalIncomeMonth")] decimal TotalIncomeMonth,
+    [property: JsonPropertyName("totalExpenseMonth")] decimal TotalExpenseMonth,
+    [property: JsonPropertyName("cardColor")] string CardColor);

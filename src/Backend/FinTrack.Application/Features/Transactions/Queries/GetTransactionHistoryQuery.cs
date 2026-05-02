@@ -46,7 +46,7 @@ public sealed class GetTransactionHistoryQueryHandler : IRequestHandler<GetTrans
         return await _dbContext.TransactionHistories
             .AsNoTracking()
             .Where(history => history.TransactionId == request.TransactionId && history.UserId == userId)
-            .OrderByDescending(history => history.OccurredAtUtc)
+            .OrderBy(history => history.OccurredAtUtc)
             .Select(history => new TransactionHistoryDto(
                 history.Id,
                 history.TransactionId,

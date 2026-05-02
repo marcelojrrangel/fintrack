@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FinTrack.Domain.Enums;
 
 namespace FinTrack.Application.Common.Models;
@@ -5,8 +6,8 @@ namespace FinTrack.Application.Common.Models;
 public sealed record TransactionHistoryDto(
     Guid Id,
     Guid TransactionId,
-    HistoryActionType Action,
-    string Description,
-    string? PreviousValues,
-    string? CurrentValues,
-    DateTime OccurredAtUtc);
+    [property: JsonPropertyName("action")] HistoryActionType Action,
+    [property: JsonPropertyName("description")] string Description,
+    [property: JsonPropertyName("previousValues")] string? PreviousValues,
+    [property: JsonPropertyName("currentValues")] string? CurrentValues,
+    [property: JsonPropertyName("occurredAtUtc")] DateTime OccurredAtUtc);

@@ -21,3 +21,13 @@ export interface TransactionMutationPayload {
   type: TransactionType;
   description: string;
 }
+
+export interface TransactionFilter {
+  description?: string;
+  categoryId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  type?: TransactionType | '';
+  minAmount?: number;
+  maxAmount?: number;
+}
