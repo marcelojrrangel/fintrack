@@ -68,6 +68,11 @@ public sealed class InfrastructureTests
     public async Task OracleDatabaseInitializer_ShouldEnsureDatabaseCreated()
     {
         await using var context = TestDbContextFactory.CreateContext();
+        
+        // Skip if not using a relational provider (e.g., InMemory)
+        if (!context.Database.ProviderName.Contains("Oracle", StringComparison.OrdinalIgnoreCase))
+            return;
+
         var initializer = new OracleDatabaseInitializer(context);
 
         await initializer.InitializeAsync(CancellationToken.None);
