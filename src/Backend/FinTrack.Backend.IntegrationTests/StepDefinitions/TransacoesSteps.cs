@@ -351,7 +351,7 @@ public class TransacoesSteps
         _historyList!.Should().NotBeEmpty();
 
         var expectedAction = Enum.Parse<FinTrack.Domain.Enums.HistoryActionType>(acaoEsperada);
-        _historyList.First().Action.Should().Be(expectedAction);
+        _historyList!.First().Action.Should().Be(expectedAction);
     }
 
     [Then(@"os próximos (.*) registros devem ter ação ""(.*)""")]

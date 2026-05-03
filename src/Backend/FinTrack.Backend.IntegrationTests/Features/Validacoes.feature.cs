@@ -26,8 +26,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
         
         private static string[] featureTags = ((string[])(null));
         
-        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Validações de Transações", ("  Como um sistema de controle financeiro\r\n  Eu quero validar os dados das transaç" +
-                "ões\r\n  Para garantir a integridade dos dados"), global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
+        private static global::Reqnroll.FeatureInfo featureInfo = new global::Reqnroll.FeatureInfo(new System.Globalization.CultureInfo("pt-BR"), "Features", "Validações de Transações", "  Como um sistema de controle financeiro\r\n  Eu quero validar os dados das transaç" +
+                "ões\r\n  Para garantir a integridade dos dados", global::Reqnroll.ProgrammingLanguage.CSharp, featureTags);
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
@@ -235,7 +235,8 @@ namespace FinTrack.Backend.IntegrationTests.Features
             {
                 await this.ScenarioStartAsync();
                 await this.FeatureBackgroundAsync();
-                await testRunner.WhenAsync("eu tento criar uma transação com categoria \"99999999-9999-9999-9999-999999999999\"", ((string)(null)), ((global::Reqnroll.Table)(null)), "Quando ");
+                await testRunner.WhenAsync("eu tento criar uma transação com categoria \"99999999-9999-9999-9999-999999999999\"" +
+                        "", ((string)(null)), ((global::Reqnroll.Table)(null)), "Quando ");
                 await testRunner.ThenAsync("a requisição deve falhar com status 404", ((string)(null)), ((global::Reqnroll.Table)(null)), "Então ");
             }
             await this.ScenarioCleanupAsync();
