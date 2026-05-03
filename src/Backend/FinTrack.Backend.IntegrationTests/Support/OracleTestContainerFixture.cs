@@ -13,7 +13,6 @@ public class OracleTestContainerFixture : IDisposable
     private const string ConnectionString = "User Id=system;Password=TestPassword123;Data Source=localhost:1523/FREEPDB1;";
     private static readonly SemaphoreSlim _lock = new(1, 1);
     private static bool _initialized;
-    private static bool _validated;
 
     public string GetConnectionString() => ConnectionString;
 
@@ -48,7 +47,6 @@ public class OracleTestContainerFixture : IDisposable
 
                     await connection.CloseAsync();
                     connected = true;
-                    _validated = true;
                     Console.WriteLine($"✅ Conexão com Oracle estabelecida e schema limpo!");
                 }
                 catch (Exception ex)
@@ -91,11 +89,19 @@ public class OracleTestContainerFixture : IDisposable
         }
     }
 
+    private static readonly HashSet<string> TabelasAplicacao = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "USERS",
+        "TRANSACTIONS",
+        "TRANSACTION_HISTORY",
+        "CATEGORIES"
+    };
+
     private static async Task LimparSchemaAsync(OracleConnection connection)
     {
         try
         {
-            // Listar e dropar cada tabela individualmente
+            // Listar e dropar cada tabela da aplicação
             var tabelas = new List<string>();
 
             using (var cmdList = connection.CreateCommand())
@@ -104,7 +110,11 @@ public class OracleTestContainerFixture : IDisposable
                 using var reader = await cmdList.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    tabelas.Add(reader.GetString(0));
+                    var tableName = reader.GetString(0);
+                    if (TabelasAplicacao.Contains(tableName))
+                    {
+                        tabelas.Add(tableName);
+                    }
                 }
             }
 
@@ -130,7 +140,6 @@ public class OracleTestContainerFixture : IDisposable
         catch (Exception ex)
         {
             Console.WriteLine($"⚠️  Aviso ao limpar schema: {ex.Message}");
-            // Não lançar exceção aqui, pois pode ser a primeira execução sem tabelas
         }
     }
 

@@ -125,6 +125,14 @@ public class TestHooks
         }
     }
 
+    private static readonly HashSet<string> TabelasAplicacao = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "USERS",
+        "TRANSACTIONS",
+        "TRANSACTION_HISTORY",
+        "CATEGORIES"
+    };
+
     private async Task DroparTodasTabelasAsync(FinTrackDbContext dbContext)
     {
         try
@@ -138,7 +146,7 @@ public class TestHooks
                 wasOpened = true;
             }
 
-            // Primeiro, listar as tabelas existentes
+            // Listar apenas as tabelas da aplicação
             var tabelas = new List<string>();
             using (var cmdList = connection.CreateCommand())
             {
@@ -146,7 +154,11 @@ public class TestHooks
                 using var reader = await cmdList.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    tabelas.Add(reader.GetString(0));
+                    var tableName = reader.GetString(0);
+                    if (TabelasAplicacao.Contains(tableName))
+                    {
+                        tabelas.Add(tableName);
+                    }
                 }
             }
 
@@ -178,7 +190,6 @@ public class TestHooks
         catch (Exception ex)
         {
             Console.WriteLine($"⚠️  Erro geral ao dropar tabelas: {ex.Message}");
-            // Não lançar exceção, pode ser a primeira execução
         }
     }
 
